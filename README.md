@@ -20,7 +20,8 @@ Upon launching the application, you will be presented with a GUI where you can:
 - Start and observe the pathfinding process in action.
 
 ## Preview
-![](readme_images/pathfinding_visualization.gif)
+![](reademe_images/pathfinding_visualization.gif)
+![](reademe_images/pathfinding_visualization_0.gif)
 
 ## Future Work
 - Adding more algorithms.
