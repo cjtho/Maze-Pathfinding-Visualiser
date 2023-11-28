@@ -16,8 +16,8 @@ class BFS(AbstractSearch):
             history.append((BFS.COLOR_VISITED, current))
 
             if current == self.end:
-                self.path = self.reconstruct_path()
-                for cell in self.path:
+                path = self.reconstruct_path()
+                for cell in path:
                     history.append((BFS.COLOR_PATH, cell))
                 break
 

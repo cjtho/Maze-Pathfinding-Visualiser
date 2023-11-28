@@ -12,7 +12,6 @@ class AbstractSearch(ABC):
         self.start, self.end = maze.find_start_end()
         self.directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         self.visited = set()
-        self.path = []
         self.came_from = {self.start: None}
         self.open_set = [self.start]
         self.modify_directions()
