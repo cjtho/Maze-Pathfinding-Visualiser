@@ -141,4 +141,3 @@ class SidePanel:
         }
 
         self.event_listener.notify("begin_visuals_button_pressed", data)
-
