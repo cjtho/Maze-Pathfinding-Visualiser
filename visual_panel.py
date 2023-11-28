@@ -3,6 +3,7 @@ import math
 import tkinter as tk
 from maze import Maze
 from search_algorithm_panel import SearchAlgorithmPanel
+from PIL import ImageGrab, Image
 
 
 class VisualPanel:
@@ -12,6 +13,7 @@ class VisualPanel:
         self.panels = []
         self.event_listener = event_listener
         self.event_listener.subscribe("begin_visuals_button_pressed", self.button_pressed)
+        self.frames = []
 
     def initialize_frame(self):
         self.frame = tk.Frame(self.parent)
@@ -20,15 +22,15 @@ class VisualPanel:
     def reset_frame(self):
         self.frame.destroy()
         self.panels.clear()
+        self.frames.clear()
         self.initialize_frame()
 
     def button_pressed(self, data):
         self.speed = data["settings"]["speed"]
-
+        self.saving_gif = data["settings"]["save_gif"]
         self.reset_frame()
         self.create_panels(data)
 
-        # gives time to settle the graphs
         current_load = (len(data["algorithms"]) * data["settings"]["rows"] *
                         data["settings"]["cols"] * data["settings"]["speed"])
         maximum_load = 100 * 100 * 100 * 9  # yes, this has to be manually updated, fix later
@@ -49,11 +51,11 @@ class VisualPanel:
         if rows * cols < num_panels:
             rows += 1
 
-        for i, (name, data) in enumerate(data["algorithms"].items()):
+        for i, (name, algorithm_data) in enumerate(data["algorithms"].items()):
             row, col = divmod(i, cols)
             frame = self.create_panel_frame(row, col)
 
-            module = data["module"]
+            module = algorithm_data["module"]
             class_ = module.get_class()
             instantiated_algorithm = class_(copy.deepcopy(maze))
 
@@ -68,10 +70,35 @@ class VisualPanel:
         return frame
 
     def run(self):
+        if self.saving_gif:
+            self.capture_frame()
+
         if not self.panels:
+            if self.saving_gif:
+                self.save_gif("reademe_images/pathfinding_visualization.gif")
             return
+
         for panel in self.panels:
             panel.update(self.speed)
             if panel.is_finished():
                 self.panels.remove(panel)
+
         self.frame.after(16, self.run)  # 60 fps
+
+    def capture_frame(self, resize_factor=0.5):
+        x0 = self.frame.winfo_rootx()
+        y0 = self.frame.winfo_rooty()
+        x1 = x0 + self.frame.winfo_width()
+        y1 = y0 + self.frame.winfo_height()
+        frame = ImageGrab.grab().crop((x0, y0, x1, y1))
+
+        if resize_factor != 1:
+            frame = frame.resize((int(frame.width * resize_factor),
+                                  int(frame.height * resize_factor)),
+                                 Image.ANTIALIAS)
+
+        self.frames.append(frame)
+
+    def save_gif(self, filename, duration=100):
+        self.frames[0].save(filename, save_all=True, append_images=self.frames[1:], optimize=True, duration=duration,
+                            loop=0)

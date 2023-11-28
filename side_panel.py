@@ -17,6 +17,8 @@ class SidePanel:
         self.speed_var = tk.IntVar()
         self.walls_var = tk.DoubleVar()
 
+        self.save_gif_var = tk.IntVar(value=0)
+
         self.font = ("Helvetica", 16)
         self.style = ttk.Style()
         self.style.configure("Custom.TButton", font=self.font)
@@ -27,6 +29,7 @@ class SidePanel:
         self.create_title_frame()
         self.create_checkboxes_frame()
         self.create_sliders_frame()
+        self.create_save_gif_switch()
         self.create_start_button()
 
     def create_title_frame(self):
@@ -81,6 +84,18 @@ class SidePanel:
                           resolution=resolution)
         slider.pack(side="top", fill="x", expand=True)
 
+    def create_save_gif_switch(self):
+        switch_frame = tk.Frame(self.frame)
+        switch_frame.pack(side="top", fill="x", padx=5, pady=(5, 10))
+
+        # Label for the switch
+        switch_label = tk.Label(switch_frame, text="SAVE GIF", font=self.font)
+        switch_label.pack(side="left")
+
+        # Save GIF switch
+        save_gif_switch = tk.Checkbutton(switch_frame, text="Off/On", variable=self.save_gif_var, font=self.font)
+        save_gif_switch.pack(side="right")
+
     def create_start_button(self):
         button = ttk.Button(self.frame, text="START", style="Custom.TButton", command=self.on_button_pressed)
         button.pack(side="bottom", fill="x", padx=5, pady=5)
@@ -112,16 +127,18 @@ class SidePanel:
         checked_modules = {x: self.search_algorithms[x] for x in checked_algorithms}
 
         # collect slider values
-        slider_values = {
+        config = {
             "rows": self.rows_var.get(),
             "cols": self.cols_var.get(),
             "speed": self.speed_var.get(),
             "walls": 1 - self.walls_var.get(),
+            "save_gif": self.save_gif_var.get(),
         }
 
         data = {
             "algorithms": checked_modules,
-            "settings": slider_values
+            "settings": config
         }
 
         self.event_listener.notify("begin_visuals_button_pressed", data)
+
