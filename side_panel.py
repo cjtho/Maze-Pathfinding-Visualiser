@@ -88,11 +88,9 @@ class SidePanel:
         switch_frame = tk.Frame(self.frame)
         switch_frame.pack(side="top", fill="x", padx=5, pady=(5, 10))
 
-        # Label for the switch
-        switch_label = tk.Label(switch_frame, text="SAVE GIF", font=self.font)
+        switch_label = tk.Label(switch_frame, text="SAVE GIF (unsafe)", font=self.font)
         switch_label.pack(side="left")
 
-        # Save GIF switch
         save_gif_switch = tk.Checkbutton(switch_frame, text="Off/On", variable=self.save_gif_var, font=self.font)
         save_gif_switch.pack(side="right")
 
