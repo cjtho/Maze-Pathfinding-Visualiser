@@ -103,7 +103,7 @@ class VisualPanel:
     def save_gif(self, duration=100):
         index = 0
         while True:
-            filename = f"reademe_images/pathfinding_visualization_{index}.gif"
+            filename = f"readme_images/pathfinding_visualization_{index}.gif"
             if not os.path.exists(filename):
                 self.frames[0].save(filename, save_all=True, append_images=self.frames[1:], optimize=True,
                                     duration=duration, loop=0)
