@@ -4,6 +4,7 @@ import tkinter as tk
 from maze import Maze
 from search_algorithm_panel import SearchAlgorithmPanel
 from PIL import ImageGrab, Image
+import os
 
 
 class VisualPanel:
@@ -75,7 +76,7 @@ class VisualPanel:
 
         if not self.panels:
             if self.saving_gif:
-                self.save_gif("reademe_images/pathfinding_visualization.gif")
+                self.save_gif()
             return
 
         for panel in self.panels:
@@ -99,6 +100,13 @@ class VisualPanel:
 
         self.frames.append(frame)
 
-    def save_gif(self, filename, duration=100):
-        self.frames[0].save(filename, save_all=True, append_images=self.frames[1:], optimize=True, duration=duration,
-                            loop=0)
+    def save_gif(self, duration=100):
+        index = 0
+        while True:
+            filename = f"reademe_images/pathfinding_visualization_{index}.gif"
+            if not os.path.exists(filename):
+                self.frames[0].save(filename, save_all=True, append_images=self.frames[1:], optimize=True,
+                                    duration=duration, loop=0)
+                break
+            else:
+                index += 1
