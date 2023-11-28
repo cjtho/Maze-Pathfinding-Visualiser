@@ -22,6 +22,7 @@ Upon launching the application, you will be presented with a GUI where you can:
 ## Preview
 ![](reademe_images/pathfinding_visualization.gif)
 ![](reademe_images/pathfinding_visualization_0.gif)
+![](reademe_images/pathfinding_visualization_1.gif)
 
 ## Future Work
 - Adding more algorithms.
