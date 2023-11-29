@@ -5,10 +5,6 @@ from visual_panel import VisualPanel
 from event_controller import EventListener
 
 
-# TODO
-# add custom multidirectional, line algorithm
-
-
 class App:
     def __init__(self, root):
         self.root = root

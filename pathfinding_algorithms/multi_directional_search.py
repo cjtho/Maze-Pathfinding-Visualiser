@@ -10,7 +10,6 @@ class MultiDirectionalSearch(AbstractSearch):
         super().__init__(maze)
         self.history = []
         self.clusters = [Cluster(self.start), Cluster(self.end)]
-        self.global_visited = set()
 
     def add_clusters(self, cells):
         new_clusters = list(map(lambda x: Cluster(x), cells))
