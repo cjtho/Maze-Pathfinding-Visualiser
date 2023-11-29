@@ -52,6 +52,14 @@ class VisualPanel:
         if rows * cols < num_panels:
             rows += 1
 
+        self.frame.update()
+        frame_width = self.frame.winfo_width()
+        frame_height = self.frame.winfo_height()
+
+        aspect_ratio = frame_width / frame_height
+        if aspect_ratio > 1:
+            rows, cols = cols, rows
+
         for i, (name, algorithm_data) in enumerate(data["algorithms"].items()):
             row, col = divmod(i, cols)
             frame = self.create_panel_frame(row, col)

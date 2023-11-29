@@ -1,29 +1,35 @@
 from .multi_directional_search import MultiDirectionalSearch
-import random
+from collections import deque
 
-
-class BogoBFSAstarMultiDirectionalSearch(MultiDirectionalSearch):
+class TriBFSAstarMultiDirectionalSearch(MultiDirectionalSearch):
     def __init__(self, maze):
         super().__init__(maze)
-        random_cells = self.get_random_valid_cells(max(self.maze.get_dimensions()) // 10)
-        self.add_clusters(random_cells)
+        middle_cell = self.get_manhattan_middle(self.maze.start, self.maze.end)
+        path_cell = self.find_valid_path_bfs(middle_cell)
 
-    def get_random_valid_cells(self, n, max_attempts=1000):
-        valid_cells = []
-        attempts = 0
+        if path_cell:
+            self.add_clusters([path_cell])
 
-        while len(valid_cells) < n and attempts < max_attempts:
-            row = random.randint(0, self.maze.rows - 1)
-            col = random.randint(0, self.maze.cols - 1)
+    def get_manhattan_middle(self, start, end):
+        middle_row = (start[0] + end[0]) // 2
+        middle_col = (start[1] + end[1]) // 2
+        return middle_row, middle_col
 
-            if self.maze.is_valid((row, col)) and self.maze[row][col] == self.maze.PATH:
-                if (row, col) not in valid_cells:
-                    valid_cells.append((row, col))
+    def find_valid_path_bfs(self, start):
+        visited = set()
+        queue = deque([start])
 
-            attempts += 1
+        while queue:
+            current = queue.popleft()
+            if self.maze.is_valid(current) and self.maze[current[0]][current[1]] == self.maze.PATH:
+                return current
 
-        return valid_cells
+            visited.add(current)
+            for neighbor in self.get_neighbors(current):
+                if neighbor not in visited:
+                    queue.append(neighbor)
 
+        return None
 
 def get_class():
-    return BogoBFSAstarMultiDirectionalSearch
+    return TriBFSAstarMultiDirectionalSearch
